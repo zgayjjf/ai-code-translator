@@ -1,4 +1,4 @@
-import { APIKeyInput } from '@/components/APIKeyInput';
+import { AICodeInput } from '@/components/AICodeInput';
 import { CodeBlock } from '@/components/CodeBlock';
 import { LanguageSelect } from '@/components/LanguageSelect';
 import { ModelSelect } from '@/components/ModelSelect';
@@ -16,6 +16,7 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(false);
   const [hasTranslated, setHasTranslated] = useState<boolean>(false);
   const [apiKey, setApiKey] = useState<string>('');
+  const [apiBasePath, setApiBasePath] = useState<string>('https://api.openai.com/v1');
 
   const handleTranslate = async () => {
     const maxCodeLength = model === 'gpt-3.5-turbo' ? 6000 : 12000;
@@ -53,6 +54,7 @@ export default function Home() {
       inputCode,
       model,
       apiKey,
+      apiBasePath
     };
 
     const response = await fetch('/api/translate', {
@@ -113,6 +115,13 @@ export default function Home() {
     localStorage.setItem('apiKey', value);
   };
 
+  const handleBasePathChange = (value: string) => {
+    setApiBasePath(value);
+
+    localStorage.setItem('basePath', value);
+  };
+
+
   useEffect(() => {
     if (hasTranslated) {
       handleTranslate();
@@ -121,9 +130,11 @@ export default function Home() {
 
   useEffect(() => {
     const apiKey = localStorage.getItem('apiKey');
+    const basePath = localStorage.getItem('basePath')
 
     if (apiKey) {
       setApiKey(apiKey);
+      setApiBasePath(basePath || '')
     }
   }, []);
 
@@ -143,8 +154,10 @@ export default function Home() {
           <div className="text-4xl font-bold">AI Code Translator</div>
         </div>
 
-        <div className="mt-6 text-center text-sm">
-          <APIKeyInput apiKey={apiKey} onChange={handleApiKeyChange} />
+        <div className="mt-6 text-sm flex flex-row">
+          <AICodeInput type="password" value={apiKey} placeholder="OpenAI API Key" onChange={handleApiKeyChange} />
+          <span className="inline-block w-2"></span>
+          <AICodeInput value={apiBasePath} placeholder="OpenAI Base Path" onChange={handleBasePathChange} />
         </div>
 
         <div className="mt-2 flex items-center space-x-2">

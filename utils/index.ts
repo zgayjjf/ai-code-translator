@@ -83,6 +83,7 @@ export const OpenAIStream = async (
 
   const system = { role: 'system', content: prompt };
 
+  console.log('api path', apiBasePath, process.env.OPENAI_BASE_PATH)
   const res = await fetch(`${apiBasePath || process.env.OPENAI_BASE_PATH}/chat/completions`, {
     headers: {
       'Content-Type': 'application/json',
