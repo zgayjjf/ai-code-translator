@@ -16,6 +16,7 @@ const handler = async (req: Request): Promise<Response> => {
       inputCode,
       model,
       apiKey,
+      apiBasePath,
     );
 
     return new Response(stream);
