@@ -76,16 +76,17 @@ export const OpenAIStream = async (
   outputLanguage: string,
   inputCode: string,
   model: string,
-  key: string,
+  apiKey: string,
+  apiBasePath?: string
 ) => {
   const prompt = createPrompt(inputLanguage, outputLanguage, inputCode);
 
   const system = { role: 'system', content: prompt };
 
-  const res = await fetch(`https://api.openai.com/v1/chat/completions`, {
+  const res = await fetch(`${apiBasePath || process.env.OPENAI_BASE_PATH}/chat/completions`, {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${key || process.env.OPENAI_API_KEY}`,
+      Authorization: `Bearer ${apiKey || process.env.OPENAI_API_KEY}`,
     },
     method: 'POST',
     body: JSON.stringify({
