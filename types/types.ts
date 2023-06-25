@@ -6,6 +6,7 @@ export interface TranslateBody {
   inputCode: string;
   model: OpenAIModel;
   apiKey: string;
+  apiBasePath?: string,
 }
 
 export interface TranslateResponse {
